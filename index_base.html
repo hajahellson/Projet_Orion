@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orientation Pro - Trouve ton métier de rêve</title>
+    <style>
+        /* Reset et styles de base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Interface Connexion/Inscription */
+        #interface0 {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .slogan {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .login-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            color: #333;
+            margin: 20px auto;
+        }
+
+        .toggle-auth {
+            margin-top: 20px;
+            text-align: center;
+            color: #4a6cf7;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Styles pour l'interface 1 - Inscription */
+        #interface1 {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6e8efb, #a777e3);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .form-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 500px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        button {
+            background-color: #4a6cf7;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #3a5bd9;
+        }
+
+        .job-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .job-card {
+            flex: 1 1 calc(33.333% - 10px);
+            min-width: 150px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .job-card:hover {
+            border-color: #4a6cf7;
+            transform: translateY(-5px);
+        }
+
+        .job-card.selected {
+            border-color: #4a6cf7;
+            background-color: #f0f4ff;
+        }
+
+        .job-card img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        /* Styles pour l'interface 2 - Quiz */
+        #interface2 {
+            display: none;
+            min-height: 100vh;
+            padding: 40px 20px;
+            background-color: #f9f9f9;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .quiz-header h2 {
+            color: #4a6cf7;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar {
+            height: 10px;
+            background-color: #e0e0e0;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: #4a6cf7;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .question-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option:hover {
+            background-color: #f5f5f5;
+        }
+
+        .option.selected {
+            border-color: #4a6cf7;
+            background-color: #f0f4ff;
+        }
+
+        .quiz-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .quiz-btn {
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .prev-btn {
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+        }
+
+        .next-btn {
+            background-color: #4a6cf7;
+            color: white;
+            border: none;
+        }
+
+        /* Styles pour l'interface 3 - Tableau de bord */
+        #interface3 {
+            display: none;
+            min-height: 100vh;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #4a6cf7;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .dashboard-nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-item {
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .nav-item.active {
+            background-color: #4a6cf7;
+            color: white;
+        }
+
+        .dashboard-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-rows: auto auto auto;
+            gap: 20px;
+        }
+
+        .sidebar {
+            display: grid;
+            grid-template-rows: auto auto;
+            gap: 20px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: #4a6cf7;
+            font-weight: 600;
+        }
+
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .progress-label {
+            font-weight: 600;
+        }
+
+        .progress-percent {
+            color: #4a6cf7;
+            font-weight: bold;
+        }
+
+        .resource-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .resource-item:last-child {
+            border-bottom: none;
+        }
+
+        .resource-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #f0f4ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: #4a6cf7;
+        }
+
+        .resource-title {
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .resource-desc {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .chat-container {
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+            border-radius: 5px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .user-message {
+            background-color: #4a6cf7;
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .bot-message {
+            background-color: #f0f0f0;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .send-btn {
+            background-color: #4a6cf7;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0 20px;
+            cursor: pointer;
+        }
+
+        .job-suggestion {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .job-suggestion:hover {
+            background-color: #f0f0f0;
+        }
+
+        .job-suggestion img {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-right: 15px;
+        }
+
+        .job-suggestion-info h4 {
+            margin-bottom: 5px;
+            color: #4a6cf7;
+        }
+
+        .job-suggestion-info p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-content {
+                grid-template-columns: 1fr;
+            }
+
+            .job-options {
+                flex-direction: column;
+            }
+
+            .job-card {
+                flex: 1 1 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Interface 0 - Connexion/Inscription -->
+    <div id="interface0">
+        <div class="logo">Orientation Pro</div>
+        <div class="slogan">Connecte-toi pour accéder à ton tableau de bord</div>
+        
+        <div class="login-container" id="login-form">
+            <h2>Connexion</h2>
+            <div class="form-group">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" placeholder="ton@email.com">
+            </div>
+            <div class="form-group">
+                <label for="login-password">Mot de passe</label>
+                <input type="password" id="login-password" placeholder="••••••••">
+            </div>
+            <button id="login-btn">Se connecter</button>
+            <div class="toggle-auth" id="show-register">Pas de compte ? S'inscrire</div>
+        </div>
+        
+        <div class="login-container" id="register-form" style="display: none;">
+            <h2>Inscription</h2>
+            <div class="form-group">
+                <label for="register-name">Prénom</label>
+                <input type="text" id="register-name" placeholder="Marie">
+            </div>
+            <div class="form-group">
+                <label for="register-age">Âge</label>
+                <input type="number" id="register-age" placeholder="15" min="12" max="18">
+            </div>
+            <div class="form-group">
+                <label for="register-email">Email</label>
+                <input type="email" id="register-email" placeholder="ton@email.com">
+            </div>
+            <div class="form-group">
+                <label for="register-password">Mot de passe</label>
+                <input type="password" id="register-password" placeholder="••••••••">
+            </div>
+            <button id="register-btn">S'inscrire</button>
+            <div class="toggle-auth" id="show-login">Déjà un compte ? Se connecter</div>
+        </div>
+    </div>
+
+    <!-- Interface 1 - Inscription -->
+    <div id="interface1">
+        <div class="logo">Orientation Pro</div>
+        <div class="slogan">Découvre ton métier de rêve et prépare-toi à un avenir professionnel passionnant !</div>
+        
+        <div class="form-container">
+            <div class="form-group">
+                <label>Ton métier de rêve</label>
+                <div class="job-options">
+                    <div class="job-card" data-job="developpeur">
+                        <img src="#" alt="Développeur Web">
+                        <h3>Développeur Web</h3>
+                        <p>Créer des sites et applications</p>
+                    </div>
+                    
+                    <div class="job-card" data-job="veterinaire">
+                        <img src="#" alt="Vétérinaire">
+                        <h3>Vétérinaire</h3>
+                        <p>Soigner les animaux</p>
+                    </div>
+                    
+                    <div class="job-card" data-job="chef">
+                        <img src="#" alt="Chef cuisinier">
+                        <h3>Chef cuisinier</h3>
+                        <p>Créer des plats délicieux</p>
+                    </div>
+                </div>
+            </div>
+            
+            <button id="start-btn">Commencer l'aventure</button>
+        </div>
+    </div>
+
+    <!-- Interface 2 - Quiz -->
+    <div id="interface2">
+        <div class="container">
+            <div class="quiz-header">
+                <h2>Quiz d'orientation</h2>
+                <p id="quiz-job-title">Développeur Web</p>
+                <div class="progress-bar">
+                    <div class="progress" id="quiz-progress"></div>
+                </div>
+            </div>
+            
+            <div class="question-container">
+                <div class="question" id="question-text">Question 1/10</div>
+                <div class="options" id="options-container">
+                    <!-- Les options seront ajoutées dynamiquement -->
+                </div>
+            </div>
+            
+            <div class="quiz-navigation">
+                <button class="quiz-btn prev-btn" id="prev-btn">Précédent</button>
+                <button class="quiz-btn next-btn" id="next-btn">Suivant</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Interface 3 - Tableau de bord -->
+    <div id="interface3">
+        <div class="container">
+            <div class="dashboard-header">
+                <div class="user-info">
+                    <div class="avatar" id="user-avatar">M</div>
+                    <div>
+                        <h2 id="dashboard-username">Marie, 15 ans</h2>
+                        <p id="dashboard-job">Métier choisi: Développeur Web</p>
+                    </div>
+                </div>
+                
+                <div class="dashboard-nav">
+                    <div class="nav-item active" data-section="progress">Progression</div>
+                    <div class="nav-item" data-section="resources">Ressources</div>
+                    <div class="nav-item" data-section="assistant">Assistant</div>
+                </div>
+            </div>
+            
+            <div class="dashboard-content">
+                <div class="main-content">
+                    <!-- Section Progression -->
+                    <div class="card progress-section">
+                        <h3 class="card-title">Ta progression</h3>
+                        <div class="progress-container">
+                            <div class="progress-info">
+                                <span class="progress-label">Connaissances générales</span>
+                                <span class="progress-percent">65%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 65%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-info">
+                                <span class="progress-label">Compétences techniques</span>
+                                <span class="progress-percent">40%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 40%;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-info">
+                                <span class="progress-label">Tests complétés</span>
+                                <span class="progress-percent">25%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 25%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Section Quiz à faire -->
+                    <div class="card">
+                        <h3 class="card-title">Quiz à compléter</h3>
+                        <div class="resource-item">
+                            <div class="resource-icon">1</div>
+                            <div>
+                                <div class="resource-title">Les bases du HTML/CSS</div>
+                                <div class="resource-desc">Testez vos connaissances sur les fondamentaux du web</div>
+                            </div>
+                        </div>
+                        
+                        <div class="resource-item">
+                            <div class="resource-icon">2</div>
+                            <div>
+                                <div class="resource-title">JavaScript pour débutants</div>
+                                <div class="resource-desc">Découvrez les concepts de base de la programmation</div>
+                            </div>
+                        </div>
+                        
+                        <div class="resource-item">
+                            <div class="resource-icon">3</div>
+                            <div>
+                                <div class="resource-title">Algorithmes simples</div>
+                                <div class="resource-desc">Apprenez à penser comme un développeur</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Section Vidéos et articles -->
+                    <div class="card">
+                        <h3 class="card-title">Ressources recommandées</h3>
+                        <div class="resource-item">
+                            <div class="resource-icon">▶</div>
+                            <div>
+                                <div class="resource-title">Comment créer ton premier site web</div>
+                                <div class="resource-desc">Vidéo tutoriel - 15 min</div>
+                            </div>
+                        </div>
+                        
+                        <div class="resource-item">
+                            <div class="resource-icon">📖</div>
+                            <div>
+                                <div class="resource-title">Les langages de programmation les plus demandés en 2023</div>
+                                <div class="resource-desc">Article - 8 min de lecture</div>
+                            </div>
+                        </div>
+                        
+                        <div class="resource-item">
+                            <div class="resource-icon">▶</div>
+                            <div>
+                                <div class="resource-title">Interview d'un développeur chez Google</div>
+                                <div class="resource-desc">Vidéo - 22 min</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar">
+                    <!-- Section Autres métiers -->
+                    <div class="card">
+                        <h3 class="card-title">Autres métiers qui pourraient t'intéresser</h3>
+                        <div class="job-suggestion">
+                            <img src="#" alt="Designer UX">
+                            <div class="job-suggestion-info">
+                                <h4>Designer UX/UI</h4>
+                                <p>Créer des interfaces utilisateur intuitives</p>
+                            </div>
+                        </div>
+                        
+                        <div class="job-suggestion">
+                            <img src="#" alt="Data Scientist">
+                            <div class="job-suggestion-info">
+                                <h4>Data Scientist</h4>
+                                <p>Analyser et interpréter des données complexes</p>
+                            </div>
+                        </div>
+                        
+                        <div class="job-suggestion">
+                            <img src="#" alt="Cybersécurité">
+                            <div class="job-suggestion-info">
+                                <h4>Expert en cybersécurité</h4>
+                                <p>Protéger les systèmes informatiques</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Section Assistant virtuel -->
+                    <div class="card assistant-section">
+                        <h3 class="card-title">Assistant Orientation</h3>
+                        <div class="chat-container">
+                            <div class="chat-messages" id="chat-messages">
+                                <div class="message bot-message">
+                                    Bonjour Marie ! Je suis ton assistant d'orientation. Pose-moi toutes tes questions sur le métier de développeur web ou ton parcours scolaire.
+                                </div>
+                            </div>
+                            <div class="chat-input">
+                                <input type="text" id="user-input" placeholder="Pose ta question ici...">
+                                <button class="send-btn" id="send-btn">Envoyer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Données globales
+        let userData = null;
+        let selectedJob = '';
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+        
+        // Base de données simulée avec 2 utilisateurs pré-inscrits
+        const userDatabase = {
+            "marie.dupont@example.com": {
+                id: "user_12345",
+                name: "Marie",
+                age: 15,
+                password: "mdp123", // En pratique: mot de passe hashé
+                dreamJob: "developpeur",
+                registrationDate: "2023-05-15",
+                lastLogin: new Date().toISOString(),
+                progress: {
+                    overall: 42,
+                    knowledge: { 
+                        score: 65, 
+                        lastQuizDate: "2023-06-18",
+                        quizzesCompleted: 3,
+                        correctAnswers: 15,
+                        totalQuestions: 23
+                    },
+                    skills: { 
+                        score: 40, 
+                        projectsCompleted: 2,
+                        skills: [
+                            { "name": "HTML", "level": 70 },
+                            { "name": "CSS", "level": 60 },
+                            { "name": "JavaScript", "level": 30 }
+                        ]
+                    },
+                    engagement: {
+                        daysActive: 12,
+                        resourcesViewed: 8,
+                        timeSpent: "15h30m"
+                    }
+                },
+                assistantChat: {
+                    conversations: [
+                        {
+                            date: new Date().toISOString().split('T')[0],
+                            messages: [
+                                {
+                                    sender: "assistant",
+                                    text: "Bonjour Marie ! Je suis ton assistant d'orientation. Pose-moi toutes tes questions sur le métier de développeur web ou ton parcours scolaire.",
+                                    time: new Date().toTimeString().substring(0,5)
+                                }
+                            ]
+                        },
+                        {
+                            date: "2023-06-18",
+                            messages: [
+                                {
+                                    sender: "user",
+                                    text: "Quelles études faut-il faire pour devenir développeur?",
+                                    time: "11:30"
+                                },
+                                {
+                                    sender: "assistant",
+                                    text: "Plusieurs parcours sont possibles :\n1. Bac général avec spécialité NSI (Numérique et Sciences Informatiques)\n2. BTS SIO (Services Informatiques aux Organisations)\n3. DUT Informatique\n4. Écoles d'ingénieur ou licences en informatique",
+                                    time: "11:30"
+                                }
+                            ]
+                        }
+                    ],
+                    mostAskedTopics: [
+                        { "topic": "études", "count": 5 },
+                        { "topic": "compétences", "count": 3 }
+                    ]
+                },
+                recommandations: {
+                    quizzes: [
+                        {
+                            id: "quiz_html1",
+                            title: "Les bases du HTML",
+                            description: "Testez vos connaissances sur les balises fondamentales",
+                            difficulty: "débutant",
+                            duration: "15 min",
+                            completed: true,
+                            score: 80
+                        },
+                        {
+                            id: "quiz_js1",
+                            title: "JavaScript pour débutants",
+                            description: "Découvrez les concepts de base de la programmation",
+                            difficulty: "débutant",
+                            duration: "20 min",
+                            completed: false,
+                            score: null
+                        }
+                    ],
+                    resources: [
+                        {
+                            id: "vid_webdev1",
+                            title: "Comment créer ton premier site web",
+                            type: "vidéo",
+                            duration: "15 min",
+                            url: "#",
+                            viewed: true,
+                            completion: 100
+                        },
+                        {
+                            id: "art_webdev1",
+                            title: "Les langages de programmation les plus demandés en 2023",
+                            type: "article",
+                            duration: "8 min",
+                            url: "#",
+                            viewed: false,
+                            completion: 0
+                        }
+                    ]
+                },
+                alternativeCareers: [
+                    {
+                        id: "job_uxdesigner",
+                        title: "Designer UX/UI",
+                        matchScore: 78,
+                        reason: "Complémentaire au développement web avec un aspect plus créatif",
+                        image: "#"
+                    },
+                    {
+                        id: "job_datascientist",
+                        title: "Data Scientist",
+                        matchScore: 65,
+                        reason: "Pour ceux qui aiment la programmation et les mathématiques",
+                        image: "#"
+                    }
+                ]
+            },
+            "jean.martin@example.com": {
+                id: "user_67890",
+                name: "Jean",
+                age: 16,
+                password: "martin456", // En pratique: mot de passe hashé
+                dreamJob: "veterinaire",
+                registrationDate: "2023-04-10",
+                lastLogin: new Date().toISOString(),
+                progress: {
+                    overall: 35,
+                    knowledge: { 
+                        score: 50, 
+                        lastQuizDate: "2023-06-15",
+                        quizzesCompleted: 2,
+                        correctAnswers: 8,
+                        totalQuestions: 16
+                    },
+                    skills: { 
+                        score: 20, 
+                        projectsCompleted: 1,
+                        skills: [
+                            { "name": "Biologie", "level": 60 },
+                            { "name": "Chimie", "level": 45 }
+                        ]
+                    },
+                    engagement: {
+                        daysActive: 8,
+                        resourcesViewed: 5,
+                        timeSpent: "9h15m"
+                    }
+                },
+                assistantChat: {
+                    conversations: [
+                        {
+                            date: new Date().toISOString().split('T')[0],
+                            messages: [
+                                {
+                                    sender: "assistant",
+                                    text: "Bonjour Jean ! Je suis ton assistant d'orientation. Pose-moi toutes tes questions sur le métier de vétérinaire ou ton parcours scolaire.",
+                                    time: new Date().toTimeString().substring(0,5)
+                                }
+                            ]
+                        }
+                    ],
+                    mostAskedTopics: [
+                        { "topic": "études", "count": 2 }
+                    ]
+                },
+                recommandations: {
+                    quizzes: [
+                        {
+                            id: "quiz_bio1",
+                            title: "Anatomie animale de base",
+                            description: "Testez vos connaissances sur l'anatomie des animaux domestiques",
+                            difficulty: "débutant",
+                            duration: "15 min",
+                            completed: true,
+                            score: 70
+                        }
+                    ],
+                    resources: [
+                        {
+                            id: "vid_vet1",
+                            title: "Une journée avec un vétérinaire",
+                            type: "vidéo",
+                            duration: "12 min",
+                            url: "#",
+                            viewed: true,
+                            completion: 100
+                        }
+                    ]
+                },
+                alternativeCareers: [
+                    {
+                        id: "job_zoologiste",
+                        title: "Zoologiste",
+                        matchScore: 72,
+                        reason: "Pour ceux qui aiment étudier les animaux dans leur milieu naturel",
+                        image: "#"
+                    }
+                ]
+            }
+        };
+
+        // Quiz data for each profession
+        const quizData = {
+            developpeur: [
+                {
+                    question: "Quelle balise HTML est utilisée pour créer un lien hypertexte?",
+                    options: ["<link>", "<a>", "<href>", "<url>"],
+                    answer: 1
+                },
+                {
+                    question: "Quelle propriété CSS change la couleur du texte?",
+                    options: ["text-color", "font-color", "color", "text-style"],
+                    answer: 2
+                },
+                {
+                    question: "Quel langage est principalement utilisé pour ajouter de l'interactivité à un site web?",
+                    options: ["HTML", "CSS", "JavaScript", "Python"],
+                    answer: 2
+                },
+                {
+                    question: "Que signifie 'CSS'?",
+                    options: ["Computer Style Sheets", "Creative Style Sheets", "Cascading Style Sheets", "Colorful Style Sheets"],
+                    answer: 2
+                },
+                {
+                    question: "Quelle méthode JavaScript permet d'afficher une boîte de dialogue?",
+                    options: ["alert()", "message()", "display()", "show()"],
+                    answer: 0
+                }
+            ],
+            veterinaire: [
+                {
+                    question: "Quelle est la température corporelle normale d'un chien en degrés Celsius?",
+                    options: ["35-36", "37-38", "38-39", "40-41"],
+                    answer: 2
+                },
+                {
+                    question: "Quel est le principal outil utilisé pour écouter le cœur d'un animal?",
+                    options: ["Oscilloscope", "Stéthoscope", "Otoscope", "Thermomètre"],
+                    answer: 1
+                },
+                {
+                    question: "Combien d'années d'études sont nécessaires pour devenir vétérinaire en France?",
+                    options: ["3 ans", "5 ans", "7 ans", "9 ans"],
+                    answer: 2
+                },
+                {
+                    question: "Quelle vitamine est essentielle pour la santé des os des animaux?",
+                    options: ["Vitamine A", "Vitamine C", "Vitamine D", "Vitamine E"],
+                    answer: 2
+                },
+                {
+                    question: "Quel est le nom de la profession qui s'occupe spécifiquement des chevaux?",
+                    options: ["Caninologue", "Félinologue", "Équidéologue", "Équidé"],
+                    answer: 3
+                }
+            ],
+            chef: [
+                {
+                    question: "Quelle technique de cuisson consiste à faire revenir rapidement des aliments à feu vif?",
+                    options: ["Sauter", "Braisage", "Pocher", "Sous-vide"],
+                    answer: 0
+                },
+                {
+                    question: "Quelle est la signification de 'mise en place' en cuisine?",
+                    options: ["Nettoyer la cuisine", "Préparer tous les ingrédients avant de cuisiner", "Dresser l'assiette", "Faire les courses"],
+                    answer: 1
+                },
+                {
+                    question: "Quel couteau est principalement utilisé pour hacher les herbes?",
+                    options: ["Couteau d'office", "Couteau à désosser", "Couteau santoku", "Couteau de chef"],
+                    answer: 0
+                },
+                {
+                    question: "Quelle température interne doit atteindre un poulet pour être considéré comme cuit?",
+                    options: ["60°C", "65°C", "70°C", "75°C"],
+                    answer: 3
+                },
+                {
+                    question: "Quelle école culinaire française est considérée comme l'une des plus prestigieuses?",
+                    options: ["Le Cordon Bleu", "Ferrandi", "Institut Paul Bocuse", "L'Atelier des Chefs"],
+                    answer: 0
+                }
+            ]
+        };
+
+        // Assistant responses
+        const assistantResponses = {
+            developpeur: {
+                "salut": "Bonjour ! Comment puis-je t'aider dans ton parcours pour devenir développeur web?",
+                "par où commencer": "Je te conseille de commencer par apprendre les bases du HTML et CSS. Ensuite, tu peux passer au JavaScript. Il existe de nombreuses ressources en ligne gratuites comme Codecademy ou freeCodeCamp.",
+                "quelles études": "Plusieurs parcours sont possibles :\n1. Bac général avec spécialité NSI (Numérique et Sciences Informatiques)\n2. BTS SIO (Services Informatiques aux Organisations)\n3. DUT Informatique\n4. Écoles d'ingénieur ou licences en informatique",
+                "salaire": "Un développeur junior gagne généralement entre 25 000€ et 35 000€ par an. Avec de l'expérience, cela peut monter à 50 000€ ou plus, surtout si tu te spécialises.",
+                "qualités nécessaires": "Les qualités importantes sont :\n- La logique et la résolution de problèmes\n- La patience et la persévérance\n- La créativité\n- L'envie d'apprendre constamment (les technologies évoluent vite!)",
+                "default": "Désolé, je n'ai pas compris ta question. Tu peux me demander :\n- Par où commencer\n- Quelles études faire\n- Quel salaire\n- Quelles qualités sont nécessaires"
+            },
+            veterinaire: {
+                "salut": "Bonjour ! Je suis là pour t'aider à découvrir le métier de vétérinaire. Quelle est ta question?",
+                "par où commencer": "Pour devenir vétérinaire, il faut être très bon en sciences (biologie, chimie). Au lycée, choisis un bac général avec spécialités scientifiques. Tu peux aussi faire du bénévolat dans un refuge animalier pour te familiariser avec les animaux.",
+                "quelles études": "Les études vétérinaires durent 7 ans après le bac :\n2 ans de prépa BCPST\n5 ans en école vétérinaire (il y a 4 écoles en France). C'est très sélectif, il faut travailler dur!",
+                "salaire": "Un vétérinaire en début de carrière gagne environ 2 000€ par mois. En libéral, avec de l'expérience, cela peut aller jusqu'à 5 000€ ou plus. Mais c'est un métier passion avant tout!",
+                "qualités nécessaires": "Il faut :\n- Aimer les animaux et savoir les comprendre\n- Être fort en sciences\n- Avoir une bonne résistance physique et émotionnelle\n- Savoir communiquer avec les propriétaires\n- Être patient et minutieux",
+                "default": "Je ne comprends pas ta question. Tu peux me demander :\n- Par où commencer\n- Comment sont les études\n- Quel salaire\n- Quelles qualités sont nécessaires"
+            },
+            chef: {
+                "salut": "Bonjour futur chef ! Comment puis-je t'aider dans ton projet de devenir cuisinier professionnel?",
+                "par où commencer": "Commence par pratiquer à la maison et suivre des recettes simples. Tu peux aussi :\n- Faire un stage en restaurant\n- T'inscrire à des ateliers de cuisine\n- Regarder des tutoriels de chefs professionnels\n- Lire des livres de cuisine de base",
+                "quelles études": "Plusieurs options :\n1. CAP Cuisine (2 ans après la 3ème)\n2. Bac pro Cuisine\n3. BTS Hôtellerie-Restauration\n4. Écoles privées comme Ferrandi ou Le Cordon Bleu\nL'apprentissage en restaurant est très important!",
+                "salaire": "En début de carrière :\n- Commis de cuisine : ~1 500€\n- Chef de partie : 1 800-2 200€\n- Chef étoilé : 3 000€ et bien plus\nMais les horaires sont longs et les conditions parfois difficiles.",
+                "qualités nécessaires": "Les qualités essentielles sont :\n- Passion pour la cuisine et les produits\n- Résistance physique et mentale\n- Créativité\n- Esprit d'équipe\n- Organisation et gestion du stress\n- Capacité à travailler sous pression",
+                "default": "Je n'ai pas saisi ta question. Tu peux me demander :\n- Par où commencer\n- Quelles études faire\n- Quel salaire\n- Quelles qualités sont nécessaires"
+            }
+        };
+
+        // DOM Elements
+        const interface0 = document.getElementById('interface0');
+        const interface1 = document.getElementById('interface1');
+        const interface2 = document.getElementById('interface2');
+        const interface3 = document.getElementById('interface3');
+        
+        // Authentification
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const showRegister = document.getElementById('show-register');
+        const showLogin = document.getElementById('show-login');
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        
+        // Interface 1
+        const startBtn = document.getElementById('start-btn');
+        const jobCards = document.querySelectorAll('.job-card');
+        
+        // Interface 2
+        const quizJobTitle = document.getElementById('quiz-job-title');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const quizProgress = document.getElementById('quiz-progress');
+        
+        // Interface 3
+        const userAvatar = document.getElementById('user-avatar');
+        const dashboardUsername = document.getElementById('dashboard-username');
+        const dashboardJob = document.getElementById('dashboard-job');
+        const navItems = document.querySelectorAll('.nav-item');
+        const chatMessages = document.getElementById('chat-messages');
+        const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
+
+        // Gestion de l'affichage des formulaires
+        showRegister.addEventListener('click', () => {
+            loginForm.style.display = 'none';
+            registerForm.style.display = 'block';
+        });
+
+        showLogin.addEventListener('click', () => {
+            registerForm.style.display = 'none';
+            loginForm.style.display = 'block';
+        });
+
+        // Connexion
+        loginBtn.addEventListener('click', () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                alert('Veuillez remplir tous les champs');
+                return;
+            }
+            
+            // Vérification dans la base de données
+            if (userDatabase[email] && userDatabase[email].password === password) {
+                // Connexion réussie
+                userData = userDatabase[email];
+                userDatabase[email].lastLogin = new Date().toISOString();
+                
+                // Sauvegarde dans le localStorage
+                localStorage.setItem('currentUser', JSON.stringify({
+                    email: email,
+                    lastLogin: new Date().toISOString()
+                }));
+                
+                // Redirection
+                if (userData.dreamJob) {
+                    // Aller directement au tableau de bord si métier déjà choisi
+                    showDashboard();
+                } else {
+                    // Sinon, aller à la sélection de métier
+                    interface0.style.display = 'none';
+                    interface1.style.display = 'block';
+                }
+            } else {
+                alert('Email ou mot de passe incorrect');
+            }
+        });
+
+        // Inscription
+        registerBtn.addEventListener('click', () => {
+            const name = document.getElementById('register-name').value;
+            const age = document.getElementById('register-age').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            
+            if (!name || !age || !email || !password) {
+                alert('Veuillez remplir tous les champs');
+                return;
+            }
+            
+            if (userDatabase[email]) {
+                alert('Cet email est déjà utilisé');
+                return;
+            }
+            
+            // Création du nouvel utilisateur
+            userDatabase[email] = {
+                id: "user_" + Math.random().toString(36).substring(2,9),
+                name: name,
+                age: age,
+                password: password,
+                dreamJob: '',
+                registrationDate: new Date().toISOString().split('T')[0],
+                lastLogin: new Date().toISOString(),
+                progress: {
+                    overall: 0,
+                    knowledge: { 
+                        score: 0, 
+                        lastQuizDate: null,
+                        quizzesCompleted: 0,
+                        correctAnswers: 0,
+                        totalQuestions: 0
+                    },
+                    skills: { 
+                        score: 0, 
+                        projectsCompleted: 0,
+                        skills: []
+                    },
+                    engagement: {
+                        daysActive: 1,
+                        resourcesViewed: 0,
+                        timeSpent: "0h"
+                    }
+                },
+                assistantChat: {
+                    conversations: [],
+                    mostAskedTopics: []
+                },
+                recommandations: {
+                    quizzes: [],
+                    resources: []
+                },
+                alternativeCareers: []
+            };
+            
+            // Sauvegarde dans le localStorage
+            localStorage.setItem('currentUser', JSON.stringify({
+                email: email,
+                lastLogin: new Date().toISOString()
+            }));
+            
+            // Récupérer les données
+            userData = userDatabase[email];
+            
+            // Passer à l'interface de sélection de métier
+            interface0.style.display = 'none';
+            interface1.style.display = 'block';
+        });
+
+        // Job card selection
+        jobCards.forEach(card => {
+            card.addEventListener('click', () => {
+                jobCards.forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                selectedJob = card.dataset.job;
+            });
+        });
+
+        // Start button click
+        startBtn.addEventListener('click', () => {
+            if (!selectedJob) {
+                alert('Veuillez sélectionner un métier');
+                return;
+            }
+            
+            // Mettre à jour le métier de rêve
+            userData.dreamJob = selectedJob;
+            userDatabase[userData.email].dreamJob = selectedJob;
+            
+            // Mettre à jour l'interface 2 avec le métier choisi
+            const jobTitles = {
+                developpeur: 'Développeur Web',
+                veterinaire: 'Vétérinaire',
+                chef: 'Chef cuisinier'
+            };
+            
+            quizJobTitle.textContent = jobTitles[selectedJob];
+            
+            // Afficher l'interface 2
+            interface1.style.display = 'none';
+            interface2.style.display = 'block';
+            
+            // Charger la première question
+            loadQuestion(0);
+        });
+
+        // Vérifier si un utilisateur est déjà connecté au chargement
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('currentUser');
+            
+            if (savedUser) {
+                const user = JSON.parse(savedUser);
+                
+                if (userDatabase[user.email]) {
+                    // Utilisateur trouvé, connecter automatiquement
+                    userData = userDatabase[user.email];
+                    userDatabase[user.email].lastLogin = new Date().toISOString();
+                    
+                    if (userData.dreamJob) {
+                        // Aller directement au tableau de bord si métier déjà choisi
+                        showDashboard();
+                    } else {
+                        // Sinon, aller à la sélection de métier
+                        interface0.style.display = 'none';
+                        interface1.style.display = 'block';
+                    }
+                    return;
+                }
+            }
+            
+            // Aucun utilisateur connecté, afficher l'interface de connexion
+            interface0.style.display = 'block';
+            interface1.style.display = 'none';
+            interface2.style.display = 'none';
+            interface3.style.display = 'none';
+        });
+
+        // Load question function
+        function loadQuestion(index) {
+            const questions = quizData[selectedJob];
+            const question = questions[index];
+            
+            // Update progress
+            quizProgress.style.width = `${(index + 1) / questions.length * 100}%`;
+            questionText.textContent = `Question ${index + 1}/${questions.length}: ${question.question}`;
+            
+            // Clear options
+            optionsContainer.innerHTML = '';
+            
+            // Add options
+            question.options.forEach((option, i) => {
+                const optionElement = document.createElement('div');
+                optionElement.classList.add('option');
+                if (userAnswers[index] === i) {
+                    optionElement.classList.add('selected');
+                }
+                optionElement.textContent = option;
+                optionElement.addEventListener('click', () => selectOption(index, i));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update navigation buttons
+            prevBtn.style.display = index === 0 ? 'none' : 'block';
+            nextBtn.textContent = index === questions.length - 1 ? 'Terminer' : 'Suivant';
+            
+            currentQuestion = index;
+        }
+
+        // Select option function
+        function selectOption(questionIndex, optionIndex) {
+            // Remove selected class from all options
+            const options = document.querySelectorAll('.option');
+            options.forEach(option => option.classList.remove('selected'));
+            
+            // Add selected class to clicked option
+            options[optionIndex].classList.add('selected');
+            
+            // Save answer
+            userAnswers[questionIndex] = optionIndex;
+            
+            // Check if answer is correct
+            const questions = quizData[selectedJob];
+            if (optionIndex === questions[questionIndex].answer) {
+                score++;
+            }
+        }
+
+        // Previous button click
+        prevBtn.addEventListener('click', () => {
+            if (currentQuestion > 0) {
+                loadQuestion(currentQuestion - 1);
+            }
+        });
+
+        // Next button click
+        nextBtn.addEventListener('click', () => {
+            const questions = quizData[selectedJob];
+            
+            // Check if answer is selected
+            if (userAnswers[currentQuestion] === undefined) {
+                alert('Veuillez sélectionner une réponse avant de continuer');
+                return;
+            }
+            
+            if (currentQuestion < questions.length - 1) {
+                loadQuestion(currentQuestion + 1);
+            } else {
+                // Quiz terminé, mettre à jour les données utilisateur
+                const totalQuestions = questions.length;
+                const percentage = Math.round((score / totalQuestions) * 100);
+                
+                // Mettre à jour la progression
+                userData.progress.knowledge.score = Math.max(percentage, userData.progress.knowledge.score);
+                userData.progress.knowledge.quizzesCompleted += 1;
+                userData.progress.knowledge.correctAnswers += score;
+                userData.progress.knowledge.totalQuestions += totalQuestions;
+                userData.progress.knowledge.lastQuizDate = new Date().toISOString().split('T')[0];
+                
+                // Mettre à jour la progression globale
+                userData.progress.overall = Math.round(
+                    (userData.progress.knowledge.score + userData.progress.skills.score) / 2
+                );
+                
+                // Mettre à jour l'engagement
+                userData.progress.engagement.daysActive += 1;
+                
+                // Mettre à jour la "base de données"
+                userDatabase[userData.email] = userData;
+                
+                // Afficher le tableau de bord
+                showDashboard();
+            }
+        });
+
+        // Show dashboard function
+        function showDashboard() {
+            if (!userData) return;
+            
+            // Mettre à jour les infos utilisateur
+            userAvatar.textContent = userData.name.charAt(0).toUpperCase();
+            dashboardUsername.textContent = `${userData.name}, ${userData.age} ans`;
+            
+            const jobTitles = {
+                developpeur: 'Développeur Web',
+                veterinaire: 'Vétérinaire',
+                chef: 'Chef cuisinier'
+            };
+            
+            dashboardJob.textContent = `Métier choisi: ${userData.dreamJob ? jobTitles[userData.dreamJob] : 'Non spécifié'}`;
+            
+            // Mettre à jour la progression depuis les données JSON
+            if (userData.progress) {
+                // Connaissances générales
+                document.querySelector('.progress-section .progress-container:nth-child(2) .progress-percent').textContent = 
+                    `${userData.progress.knowledge.score}%`;
+                document.querySelector('.progress-section .progress-container:nth-child(2) .progress').style.width = 
+                    `${userData.progress.knowledge.score}%`;
+                
+                // Compétences techniques
+                document.querySelector('.progress-section .progress-container:nth-child(3) .progress-percent').textContent = 
+                    `${userData.progress.skills.score}%`;
+                document.querySelector('.progress-section .progress-container:nth-child(3) .progress').style.width = 
+                    `${userData.progress.skills.score}%`;
+                
+                // Tests complétés (calcul basé sur les quizzes complétés)
+                const quizzesPercent = Math.min(100, userData.progress.knowledge.quizzesCompleted * 25);
+                document.querySelector('.progress-section .progress-container:nth-child(4) .progress-percent').textContent = 
+                    `${quizzesPercent}%`;
+                document.querySelector('.progress-section .progress-container:nth-child(4) .progress').style.width = 
+                    `${quizzesPercent}%`;
+            }
+            
+            // Mettre à jour le chat assistant
+            if (userData.assistantChat && userData.assistantChat.conversations) {
+                const chatContainer = document.getElementById('chat-messages');
+                chatContainer.innerHTML = '';
+                
+                // Afficher seulement la dernière conversation
+                const lastConversation = userData.assistantChat.conversations[0];
+                lastConversation.messages.forEach(msg => {
+                    const messageElement = document.createElement('div');
+                    messageElement.classList.add('message', msg.sender === 'user' ? 'user-message' : 'bot-message');
+                    messageElement.textContent = msg.text;
+                    chatContainer.appendChild(messageElement);
+                });
+            }
+            
+            // Afficher l'interface 3
+            interface0.style.display = 'none';
+            interface1.style.display = 'none';
+            interface2.style.display = 'none';
+            interface3.style.display = 'block';
+        }
+
+        // Navigation entre les sections du tableau de bord
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                navItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                
+                // Dans une vraie application, nous chargerions différentes vues ici
+                // Pour cette démo, nous faisons simplement défiler jusqu'à la section
+                const section = item.dataset.section;
+                document.querySelector(`.${section}-section`).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Assistant chat functionality
+        function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message || !userData) return;
+            
+            // Ajouter le message de l'utilisateur
+            addMessage(message, 'user-message');
+            
+            // Sauvegarder dans les données JSON
+            const today = new Date().toISOString().split('T')[0];
+            const time = new Date().toTimeString().substring(0,5);
+            
+            if (!userData.assistantChat) {
+                userData.assistantChat = { conversations: [] };
+            }
+            
+            // Trouver la conversation d'aujourd'hui ou en créer une nouvelle
+            let todayConvo = userData.assistantChat.conversations.find(c => c.date === today);
+            if (!todayConvo) {
+                todayConvo = { date: today, messages: [] };
+                userData.assistantChat.conversations.unshift(todayConvo);
+            }
+            
+            todayConvo.messages.push({
+                sender: "user",
+                text: message,
+                time: time
+            });
+            
+            userInput.value = '';
+            
+            // Traitement et réponse de l'assistant
+            setTimeout(() => {
+                const response = getAssistantResponse(message.toLowerCase());
+                addMessage(response, 'bot-message');
+                
+                // Sauvegarder la réponse
+                todayConvo.messages.push({
+                    sender: "assistant",
+                    text: response,
+                    time: new Date().toTimeString().substring(0,5)
+                });
+                
+                // Mettre à jour les sujets les plus demandés
+                updateMostAskedTopics(message.toLowerCase());
+                
+                // Mettre à jour la "base de données"
+                if (userData.email) {
+                    userDatabase[userData.email].assistantChat = userData.assistantChat;
+                }
+            }, 500);
+        }
+
+        // Ajouter un message au chat
+        function addMessage(text, className) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message', className);
+            messageElement.textContent = text;
+            chatMessages.appendChild(messageElement);
+            
+            // Faire défiler vers le bas
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Obtenir la réponse de l'assistant
+        function getAssistantResponse(message) {
+            if (!userData.dreamJob) return "Veuillez d'abord sélectionner un métier de rêve";
+            
+            const responses = assistantResponses[userData.dreamJob];
+            
+            // Vérifier les mots-clés spécifiques
+            if (message.includes('salut') || message.includes('bonjour')) {
+                return responses["salut"];
+            } else if (message.includes('commencer') || message.includes('début')) {
+                return responses["par où commencer"];
+            } else if (message.includes('étude') || message.includes('école') || message.includes('formation')) {
+                return responses["quelles études"];
+            } else if (message.includes('salaire') || message.includes('gagner')) {
+                return responses["salaire"];
+            } else if (message.includes('qualité') || message.includes('compétence') || message.includes('aptitude')) {
+                return responses["qualités nécessaires"];
+            } else {
+                return responses["default"];
+            }
+        }
+
+        // Mettre à jour les sujets les plus demandés
+        function updateMostAskedTopics(message) {
+            if (!userData.assistantChat.mostAskedTopics) {
+                userData.assistantChat.mostAskedTopics = [];
+            }
+            
+            let topic = 'autre';
+            if (message.includes('étude') || message.includes('école') || message.includes('formation')) {
+                topic = 'études';
+            } else if (message.includes('salaire') || message.includes('gagner')) {
+                topic = 'salaire';
+            } else if (message.includes('qualité') || message.includes('compétence')) {
+                topic = 'compétences';
+            } else if (message.includes('commencer') || message.includes('début')) {
+                topic = 'débuter';
+            }
+            
+            const existingTopic = userData.assistantChat.mostAskedTopics.find(t => t.topic === topic);
+            if (existingTopic) {
+                existingTopic.count += 1;
+            } else {
+                userData.assistantChat.mostAskedTopics.push({ topic, count: 1 });
+            }
+        }
+
+        // Event listeners pour le chat
+        sendBtn.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
